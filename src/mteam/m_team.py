@@ -17,7 +17,7 @@ class MTeam:
     def __init__(self, config: MTeamConfig):
         self.config = config
 
-    def search(self, pageNumber: int, pageSize: int, keyword: str, sortField: str, discount: str, sortDirection: str, mode: str):
+    async def search(self, pageNumber: int, pageSize: int, keyword: str, sortField: str, discount: str, sortDirection: str, mode: str):
         header = {
             "Content-Type": "application/json",
             "x-api-key": self.config.x_api_key
@@ -32,38 +32,50 @@ class MTeam:
             "mode": mode
         }
         try:
-            response = requests.post(Const.M_TEAM_HOST + "/api/torrent/search", headers=header, data=json.dumps(body))
-            if response.status_code == 200:
-                logger.info(f"search {mode} success.")
-                result_str = response.text
-                result = json.loads(result_str)
-                if result["message"].upper() == "SUCCESS":
-                   return result["data"]
-                else:
-                   logger.error(f"Search error:{response.text}")
-                   return None
-            else:
-                logger.error(f"Search error：{response.status_code}")
-                return None
-        except requests.exceptions.Timeout:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(Const.M_TEAM_HOST + "/api/torrent/search", headers=header, data=json.dumps(body)) as response:
+                    if response.status == 200:
+                        logger.info(f"search {mode} success.")
+                        result_str = await response.text()
+                        result = json.loads(result_str)
+                        if result["message"].upper() == "SUCCESS":
+                            return result["data"]
+                        else:
+                            logger.error(f"Search error:{response.text}")
+                            return None
+                    else:
+                        logger.error(f"Search error：{response.status_code}")
+                        return None
+        except aiohttp.ClientError:
             logger.error("Connect timeout, please check net or server condition.")
             return None
-        except requests.exceptions.RequestException as e:
+        except asyncio.TimeoutError as e:
             logger.error(f"Search error：{e}")
             return None
     
     def get_active_top(self, param):
+        results_queue = asyncio.Queue()
+        asyncio.run(self.gather_search_result(param, results_queue))
         search_result = []
-        for mode_item in param.mode:
-            data = self.search(1, 100, Const.SEARCH_KEY, "LEECHERS", "FREE", "DESC", mode_item)
-            search_result.extend(data["data"])
-            
+        while not results_queue.empty():
+              search_result.extend(results_queue.get_nowait()["data"]) 
         result = self.parse_search_content(search_result)
         result = self.filter(result, param)
-        
         asyncio.run(self.set_di_token(result))
         return result
     
+    
+    async def gather_search_result(self, param, results_queue):
+        tasks = []
+        search_result = []
+        for mode_item in param.mode:
+            task = asyncio.create_task(self.search(1, 100, Const.SEARCH_KEY, "LEECHERS", "FREE", "DESC", mode_item))
+            tasks.append(task)
+        await asyncio.gather(*tasks)
+        for task in tasks:
+            if not task.exception():
+                await results_queue.put(task.result())
+        
     def filter(self, data, param):
         if param.single_bigger_than is not None:
             data = list(filter(lambda x: int(x["size"]) >= param.single_bigger_than * 1024**3 , data))
@@ -84,6 +96,10 @@ class MTeam:
                     break
             data = result
         
+        if param.free_left is not None:
+            current_time = datetime.now()
+            data = list(filter(lambda x: self.__get_free_left(x) > param.free_left * 3600, data))
+        
         if param.sort_field is not None:
             if param.sort_field == "date":
                 data = sorted(data, key=lambda x: datetime.strptime(x["createdDate"], "%Y-%m-%d %H:%M:%S"), reverse=(param.sort_order != "desc"))
@@ -93,7 +109,8 @@ class MTeam:
         data = list(unique_dict.values())
 
         return data
-                
+    def __get_free_left(self, data):
+        return (datetime.strptime(data['status']["discountEndTime"], "%Y-%m-%d %H:%M:%S") - datetime.now()).total_seconds()
              
     def parse_search_content(self, search_data):
         result = []
@@ -215,7 +232,7 @@ class MTeam:
             fe.pubDate(pubDate=created_date_tz)
             fe.comments(Const.TORRENT_PREFIX + item["id"] + "#comment")
             fe.guid(item["id"], permalink=False)
-        
+            
         rss_str = fg.rss_str(pretty=True, encoding='utf-8')
         return rss_str.decode('utf-8')
         
