@@ -2,7 +2,7 @@
 
 通过在 BitTorrent 客户端中添加生成的 RSS 链接，自动下载 MTeam 每周大包。
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/xiaohaigreen/mteam-active-top-rss)](https://hub.docker.com/repository/docker/xiaohaigreen/mteam-active-top-rss/general)
+[![Docker Pulls](https://img.shields.io/docker/pulls/xiaohaigreen/mteam-active-top-rss)](https://hub.docker.com/r/xiaohaigreen/mteam-active-top-rss)
 
 ## 简介
 
