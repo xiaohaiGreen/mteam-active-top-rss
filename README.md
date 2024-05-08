@@ -1,4 +1,5 @@
 # MTeam每周免费大包自动下载器
+[Switch to English](README_EN.md)
 
 通过在 BitTorrent 客户端中添加生成的 RSS 链接，自动下载 MTeam 每周大包。
 
