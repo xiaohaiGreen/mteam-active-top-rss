@@ -9,9 +9,9 @@ from feedgen.feed import FeedGenerator
 from datetime import datetime, timezone
 import pytz
 import logging
+from util.log import log
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = log()
 
 class MTeam:
     def __init__(self, config: MTeamConfig):

@@ -6,9 +6,9 @@ from mteam.const import *
 from mteam.param import Param
 import os
 import logging
+from util.log import log
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = log()
 
 app = Flask(__name__)
 x_api_key = os.environ.get("X-API-KEY")
