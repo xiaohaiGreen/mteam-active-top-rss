@@ -83,3 +83,5 @@ services:
 ## 支持
 
 如有任何问题或疑问，请在 [GitHub](https://github.com/xiaohaiGreen/mteam-active-top-rss/issues) 上提出问题。
+
+如果这个仓库对你有帮助，请给它点个星星⭐️！
