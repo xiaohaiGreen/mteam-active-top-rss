@@ -83,3 +83,5 @@ After deploying the Docker container, you need to configure your BitTorrent clie
 ## Support
 
 If you have any questions or concerns, please raise an issue on [GitHub](https://github.com/xiaohaiGreen/mteam-active-top-rss/issues).
+
+If this repository has been helpful to you, please give it a star⭐️!
