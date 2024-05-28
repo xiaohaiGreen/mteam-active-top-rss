@@ -1,4 +1,5 @@
 # MTeam Weekly Freeleech Auto-downloader
+
 [切换到中文](README.md)
 
 Automatically download MTeam's weekly large freeleech packs by adding the generated RSS link to your BitTorrent client.
@@ -56,15 +57,16 @@ services:
 
 Optional parameters:
 
-| Parameter          | Values                                          | Explanation                                   | Supported Version |
-| ------------------ | ----------------------------------------------- | --------------------------------------------- | ---------------- |
-| sort_field         | size,date                                       | Sort by time or size                          | 1.0+             |
-| sort_order         | asc,desc                                        | Ascending or descending                       | 1.0+             |
-| single_small_than  | integer                                         | Single torrent file smaller than GB value     | 1.0+             |
-| single_bigger_than | integer                                         | Single torrent file larger than GB value      | 1.0+             |
-| total_small_than   | integer                                         | Total torrent files smaller than GB value     | 1.0+             |
-| mode               | "normal","adult","movie","music","tvshow","all" | One or multiple values, or "all"              | 1.0+             |
-| free_left          | integer                                         | Remaining freeleech time, in hours            | 1.1+             |
+| Parameter          | Values                                          | Explanation                               | Supported Version |
+| ------------------ | ----------------------------------------------- | ----------------------------------------- | ----------------- |
+| sort_field         | size,date                                       | Sort by time or size                      | 1.0+              |
+| sort_order         | asc,desc                                        | Ascending or descending                   | 1.0+              |
+| single_small_than  | integer                                         | Single torrent file smaller than GB value | 1.0+              |
+| single_bigger_than | integer                                         | Single torrent file larger than GB value  | 1.0+              |
+| total_small_than   | integer                                         | Total torrent files smaller than GB value | 1.0+              |
+| mode               | "normal","adult","movie","music","tvshow","all" | One or multiple values, or "all"          | 1.0+              |
+| free_left          | integer                                         | Remaining freeleech time, in hours        | 1.1+              |
+| count              | integer                                         | limit return count                        | 1.3+              |
 
 > Examples:
 >
