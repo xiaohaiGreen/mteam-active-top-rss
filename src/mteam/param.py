@@ -12,6 +12,7 @@ class Param:
         self.single_small_than = None
         self.total_small_than = None
         self.free_left = None
+        self.count = None
 
     def parse(self, request):
         self.sort_field = request.args.get("sort_field")
@@ -20,6 +21,8 @@ class Param:
         single_small_than_str = request.args.get("single_small_than")
         total_small_than_str = request.args.get("total_small_than")
         free_left = request.args.get("free_left")
+        count = request.args.get("count")
+
         
         if single_bigger_than_str is not None:
             self.single_bigger_than = int(single_bigger_than_str)
@@ -29,6 +32,10 @@ class Param:
             self.total_small_than = int(total_small_than_str)
         if free_left is not None:
             self.free_left = int(free_left)
+        if count is not None:   
+            self.count = int(count)
+        
+
             
         self.mode = request.args.get("mode")
         if self.sort_field is not None and not is_legal(self.sort_field, Const.SORT_FEILD_LIST):

@@ -105,6 +105,8 @@ class MTeam:
                 data = sorted(data, key=lambda x: datetime.strptime(x["createdDate"], "%Y-%m-%d %H:%M:%S"), reverse=(param.sort_order != "desc"))
             elif param.sort_field == "size":
                 data = sorted(data, key=lambda x: int(x["size"]), reverse=(param.sort_order != "desc"))
+        if param.count is not None:
+            data = data[:param.count]
         unique_dict = {item["id"]: item for item in data}
         data = list(unique_dict.values())
 

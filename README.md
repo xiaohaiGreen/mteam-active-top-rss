@@ -65,7 +65,7 @@ services:
 | total_small_than   | 整数                                            | 多个种子文件小于GB值      | 1.0+     |
 | mode               | "normal","adult","movie","music","tvshow","all" | 一个或者多个取值，或者all | 1.0+     |
 | free_left          | 整数                                            | 剩余free时长，小时        | 1.1+     |
-
+| count              | 整数                                            | 限制返回数量              | 1.3+     |
 > 样例：
 >
 > http://127.0.0.1:5000/rss?sort_field=size&sort_order=desc&mode=all
