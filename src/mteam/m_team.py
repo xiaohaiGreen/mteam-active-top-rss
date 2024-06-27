@@ -33,7 +33,7 @@ class MTeam:
         }
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.post(Const.M_TEAM_HOST + "/api/torrent/search", headers=header, data=json.dumps(body)) as response:
+                async with session.post(Const.M_TEAM_API_HOST + "/api/torrent/search", headers=header, data=json.dumps(body)) as response:
                     if response.status == 200:
                         logger.info(f"search {mode} success.")
                         result_str = await response.text()
@@ -148,7 +148,7 @@ class MTeam:
             "x-api-key": self.config.x_api_key
         }
         try:
-            response = requests.post(Const.M_TEAM_HOST + "/api/torrent/categoryList", headers=header)
+            response = requests.post(Const.M_TEAM_API_HOST + "/api/torrent/categoryList", headers=header)
             if response.status_code == 200:
                 logger.info("Get category success.")
                 result_str = response.text
@@ -193,7 +193,7 @@ class MTeam:
         }
         try:
              async with aiohttp.ClientSession() as session:
-                 async with session.post(Const.M_TEAM_HOST + "/api/torrent/genDlToken", headers=header, data=data) as response:
+                 async with session.post(Const.M_TEAM_API_HOST + "/api/torrent/genDlToken", headers=header, data=data) as response:
                     if response.status == 200:
                         logger.info("getDiToken success.")
                         result_str = await response.text()
