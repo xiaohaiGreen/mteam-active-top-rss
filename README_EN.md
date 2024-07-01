@@ -67,6 +67,10 @@ Optional parameters:
 | mode               | "normal","adult","movie","music","tvshow","all" | One or multiple values, or "all"          | 1.0+              |
 | free_left          | integer                                         | Remaining freeleech time, in hours        | 1.1+              |
 | count              | integer                                         | limit return count                        | 1.3+              |
+| seeders_less_than  | integer                                         | The number of seeds is smaller than       | 1.5+              |
+| seeders_more_than  | integer                                         | The number of seeds is greater than       | 1.5+              |
+| download_less_than | integer                                         | The number of download is smaller than    | 1.5+              |
+| download_more_than | integer                                         | The number of download is greater than    | 1.5+              |
 
 > Examples:
 >

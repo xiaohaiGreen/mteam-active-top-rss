@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 import pytz
 import logging
 from util.log import log
+from .param import Param
 
 logger = log()
 
@@ -67,7 +68,6 @@ class MTeam:
     
     async def gather_search_result(self, param, results_queue):
         tasks = []
-        search_result = []
         for mode_item in param.mode:
             task = asyncio.create_task(self.search(1, 100, Const.SEARCH_KEY, "LEECHERS", "FREE", "DESC", mode_item))
             tasks.append(task)
@@ -76,12 +76,21 @@ class MTeam:
             if not task.exception():
                 await results_queue.put(task.result())
         
-    def filter(self, data, param):
+    def filter(self, data, param: Param):
         if param.single_bigger_than is not None:
             data = list(filter(lambda x: int(x["size"]) >= param.single_bigger_than * 1024**3 , data))
         
         if param.single_small_than is not None:
             data = list(filter(lambda x: int(x["size"]) <= param.single_small_than * 1024**3 , data))
+
+        if param.seeders_less_than is not None:
+            data = list(filter(lambda x: int(x["status"]["seeders"]) <= param.seeders_less_than, data))
+        if param.seeders_more_than is not None:
+            data = list(filter(lambda x: int(x["status"]["seeders"]) >= param.seeders_more_than, data))
+        if param.download_less_than is not None:
+            data = list(filter(lambda x: int(x["status"]["leechers"]) <= param.download_less_than, data))
+        if param.download_more_than is not None:
+            data = list(filter(lambda x: int(x["status"]["leechers"]) >= param.download_more_than, data))
         
         if param.total_small_than is not None:
             # sort by size 
@@ -237,5 +246,7 @@ class MTeam:
             
         rss_str = fg.rss_str(pretty=True, encoding='utf-8')
         return rss_str.decode('utf-8')
+    
+    
         
 

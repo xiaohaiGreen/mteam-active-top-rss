@@ -1,4 +1,5 @@
 # MTeam每周免费大包自动下载器
+
 [Switch to English](README_EN.md)
 
 通过在 BitTorrent 客户端中添加生成的 RSS 链接，自动下载 MTeam 每周大包。
@@ -66,6 +67,11 @@ services:
 | mode               | "normal","adult","movie","music","tvshow","all" | 一个或者多个取值，或者all | 1.0+     |
 | free_left          | 整数                                            | 剩余free时长，小时        | 1.1+     |
 | count              | 整数                                            | 限制返回数量              | 1.3+     |
+| seeders_less_than  | 整数                                            | 做种数量小于              | 1.5+     |
+| seeders_more_than  | 整数                                            | 做种数量大于              | 1.5+     |
+| download_less_than | 整数                                            | 下载数量小于              | 1.5+     |
+| download_more_than | 整数                                            | 下载数量大于              | 1.5+     |
+
 > 样例：
 >
 > http://127.0.0.1:5000/rss?sort_field=size&sort_order=desc&mode=all
