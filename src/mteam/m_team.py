@@ -11,6 +11,7 @@ import pytz
 import logging
 from util.log import log
 from .param import Param
+from urllib.parse import urlencode, urlparse, urlunparse, parse_qs
 
 logger = log()
 
@@ -62,7 +63,7 @@ class MTeam:
               search_result.extend(results_queue.get_nowait()["data"]) 
         result = self.parse_search_content(search_result)
         result = self.filter(result, param)
-        asyncio.run(self.set_di_token(result))
+        asyncio.run(self.set_di_token(result, param))
         return result
     
     
@@ -116,6 +117,7 @@ class MTeam:
                 data = sorted(data, key=lambda x: int(x["size"]), reverse=(param.sort_order != "desc"))
         if param.count is not None:
             data = data[:param.count]
+
         unique_dict = {item["id"]: item for item in data}
         data = list(unique_dict.values())
 
@@ -178,7 +180,7 @@ class MTeam:
             logger.error(f"Search error：{e}")
             return None
         
-    async def set_di_token(self, data):
+    async def set_di_token(self, data, param: Param):
         tasks = []
         for item in data:
             task = asyncio.create_task(self.__get_di_token(item["id"]))
@@ -189,8 +191,21 @@ class MTeam:
             di_token = result[1]
             matching_elements = list(filter(lambda x: x["id"] == id, data))
             if matching_elements is not None:
+                url_param = {}
+                if param.url_use_https is not None:
+                    url_param["useHttps"] = param.url_use_https
+                if param.url_type is not None:
+                    url_param["type"] = param.url_type
+                if url_param:
+                    di_token = self._add_url_params(di_token, url_param)
                 matching_elements[0]["di_token"] = di_token
-        
+    
+    def _add_url_params(self, url, params):
+        url_parts = list(urlparse(url))
+        query = dict(parse_qs(url_parts[4]))
+        query.update(params)
+        url_parts[4] = urlencode(query, doseq=True)
+        return urlunparse(url_parts)
         
     async def __get_di_token(self, id:str):
         header = {

@@ -7,4 +7,5 @@ class Const:
     SORT_FEILD_LIST = ["size", "date"]
     SORT_ORDER_LIST = ["asc", "desc"]
     MODE_LIST = ["normal","adult","movie","music","tvshow"]
-    
+    URL_TYPE_LIST = ["ipv4","ipv6"]
+    URL_USE_HTTPS_LIST = ["true","false"]

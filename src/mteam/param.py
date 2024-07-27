@@ -1,6 +1,7 @@
 from flask import jsonify
 from mteam.util import *
 from mteam.const import *
+import json
 
 
 class Param:
@@ -17,6 +18,8 @@ class Param:
         self.seeders_more_than = None
         self.download_more_than = None
         self.download_less_than = None
+        self.url_use_https = None
+        self.url_type = None
 
     def parse(self, request):
         self.sort_field = request.args.get("sort_field")
@@ -30,6 +33,8 @@ class Param:
         seeders_more_than = request.args.get("seeders_more_than")
         download_more_than = request.args.get("download_more_than")
         download_less_than = request.args.get("download_less_than")
+        url_use_https = request.args.get("url_use_https")
+        url_type = request.args.get("url_type")
 
 
         
@@ -51,25 +56,30 @@ class Param:
             self.download_more_than = int(download_more_than)
         if download_less_than is not None:
             self.download_less_than = int(download_less_than)
+        if url_use_https is not None:
+            self.url_use_https = url_use_https
+        if url_type is not None:
+            self.url_type = url_type
         
 
             
         self.mode = request.args.get("mode")
         if self.sort_field is not None and not is_legal(self.sort_field, Const.SORT_FEILD_LIST):
-            return False, jsonify({'error': 'Invalid sort_field value, avilable:' + ','.join(Const.SORT_FEILD_LIST)}), 400
+            return False, 'Invalid sort_field value, avilable:' + ','.join(Const.SORT_FEILD_LIST), 400
         if self.sort_order is not None and not is_legal(self.sort_order, Const.SORT_ORDER_LIST):
-            return False, jsonify({'error': 'Invalid sort_order value, avilable:' + ','.join(Const.SORT_ORDER_LIST)}), 400
+            return False, 'Invalid sort_order value, avilable:' + ','.join(Const.SORT_ORDER_LIST), 400
         if self.sort_order is None:
             self.sort_order = "desc"
         if self.mode is not None:
             ok, self.mode = mode_legal(self.mode, Const.MODE_LIST)
             if not ok:
-                return False, jsonify({'error': 'Invalid mode value, avilable:' + Const.MODE_LIST + "or set all."}), 400
+                return False, 'Invalid mode value, avilable:' + Const.MODE_LIST + "or set all.", 400
         else:
             self.mode = Const.MODE_LIST
-            
-        
-        
+        if self.url_type is not None and not is_legal(self.url_type, Const.URL_TYPE_LIST):
+            return False, 'Invalid url_type value, avilable:' + ','.join(Const.URL_TYPE_LIST), 400
+        if self.url_use_https is not None and not is_legal(self.url_use_https, Const.URL_USE_HTTPS_LIST):
+            return False, 'Invalid url_use_https value, avilable:true or false', 400
 
-        return True, None
+        return True, None, None
 

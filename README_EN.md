@@ -71,6 +71,8 @@ Optional parameters:
 | seeders_more_than  | integer                                         | The number of seeds is greater than       | 1.5+              |
 | download_less_than | integer                                         | The number of download is smaller than    | 1.5+              |
 | download_more_than | integer                                         | The number of download is greater than    | 1.5+              |
+| url_use_https      | true,false                                      | Download parameters, whether to use https | 1.6+              |
+| url_type           | ipv4,ipv6                                       | Download category                         | 1.6+              |
 
 > Examples:
 >

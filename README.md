@@ -71,6 +71,8 @@ services:
 | seeders_more_than  | 整数                                            | 做种数量大于              | 1.5+     |
 | download_less_than | 整数                                            | 下载数量小于              | 1.5+     |
 | download_more_than | 整数                                            | 下载数量大于              | 1.5+     |
+| url_use_https      | true,false                                      | 下载参数，是否使用https   | 1.6+     |
+| url_type           | ipv4,ipv6                                       | 下载类别                  | 1.6+     |
 
 > 样例：
 >
